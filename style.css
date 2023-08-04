@@ -24,20 +24,10 @@
   cursor: pointer;
 }
 
-.cell-1,
-.cell-2,
-.cell-3,
-.cell-4,
-.cell-5,
-.cell-6 {
+.line-bottom {
   border-bottom: 2px solid black;
 }
 
-.cell-1,
-.cell-2,
-.cell-4,
-.cell-5,
-.cell-7,
-.cell-8 {
+.line-right {
   border-right: 2px solid black;
 }
