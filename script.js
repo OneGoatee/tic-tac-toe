@@ -21,6 +21,7 @@ const gameController = (() => {
     },
   };
 
+  let moves = 0;
   let player = 'One';
   let isPlayerOne = true;
   let isGameOver = false;
@@ -28,11 +29,7 @@ const gameController = (() => {
   const getNextPlayer = () => {
     isPlayerOne = !isPlayerOne;
 
-    if (isPlayerOne) {
-      player = 'One';
-    } else {
-      player = 'Two';
-    }
+    isPlayerOne ? (player = 'One') : (player = 'Two');
   };
 
   const getPlayerCell = e => {
@@ -63,6 +60,11 @@ const gameController = (() => {
 
   const checkWinner = () => {
     switch (true) {
+      case moves === 9:
+        gameOver();
+        console.log('Draw');
+        break;
+
       case isSubset(playerOneCells, winSequence.horizontal.top) ||
         isSubset(playerOneCells, winSequence.horizontal.middle) ||
         isSubset(playerOneCells, winSequence.horizontal.bottom) ||
@@ -92,18 +94,23 @@ const gameController = (() => {
     }
   };
 
+  const updateMoves = () => {
+    moves = playerOneCells.length + playerTwoCells.length;
+  };
+
   const handlePlayerClick = e => {
-    console.log(`Game is Over: ${isGameOver}`);
     switch (e.target.innerHTML === '' && !isGameOver) {
       case isPlayerOne:
         addPlayerMark(e);
         getPlayerCell(e);
+        updateMoves();
         checkWinner();
         break;
 
       case !isPlayerOne:
         addPlayerMark(e);
         getPlayerCell(e);
+        updateMoves();
         checkWinner();
         break;
 
@@ -112,7 +119,7 @@ const gameController = (() => {
     }
 
     disablePlayerClick(e);
-
+    moves++;
     getNextPlayer();
   };
 
