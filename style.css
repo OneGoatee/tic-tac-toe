@@ -31,3 +31,10 @@
 .line-right {
   border-right: 2px solid black;
 }
+
+.message {
+  margin-top: 1.2rem;
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: red;
+}
