@@ -31,6 +31,7 @@ const gameController = (() => {
   let messageText = '';
   let isPlayerOne = true;
   let isGameOver = false;
+  let isWinner = false;
 
   const getNextPlayer = () => {
     if (isGameOver) return;
@@ -104,7 +105,7 @@ const gameController = (() => {
         message.innerHTML = messageText;
         break;
 
-      case isGameOver && moves === 9:
+      case isGameOver && !isWinner && moves === 9:
         messageText = `It's a DRAW`;
         message.innerHTML = messageText;
         break;
@@ -121,10 +122,6 @@ const gameController = (() => {
 
   const checkWinner = () => {
     switch (true) {
-      case moves === 9:
-        gameOver();
-        break;
-
       case isSubset(playerOneCells, winSequence.horizontal.top) ||
         isSubset(playerOneCells, winSequence.horizontal.middle) ||
         isSubset(playerOneCells, winSequence.horizontal.bottom) ||
@@ -133,7 +130,9 @@ const gameController = (() => {
         isSubset(playerOneCells, winSequence.vertical.right) ||
         isSubset(playerOneCells, winSequence.diagonal.leftRight) ||
         isSubset(playerOneCells, winSequence.diagonal.rightLeft):
+        isWinner = true;
         gameOver();
+
         break;
 
       case isSubset(playerTwoCells, winSequence.horizontal.top) ||
@@ -144,6 +143,11 @@ const gameController = (() => {
         isSubset(playerTwoCells, winSequence.vertical.right) ||
         isSubset(playerTwoCells, winSequence.diagonal.leftRight) ||
         isSubset(playerTwoCells, winSequence.diagonal.rightLeft):
+        isWinner = true;
+        gameOver();
+        break;
+
+      case moves === 9:
         gameOver();
         break;
     }
