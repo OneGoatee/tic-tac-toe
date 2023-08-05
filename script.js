@@ -98,6 +98,11 @@ const gameController = (() => {
         message.innerHTML = messageText;
         break;
 
+      case isGameOver && moves === 9:
+        messageText = `It's a DRAW`;
+        message.innerHTML = messageText;
+        break;
+
       case isGameOver:
         messageText = `${player} Wins`;
         message.innerHTML = messageText;
@@ -112,7 +117,6 @@ const gameController = (() => {
     switch (true) {
       case moves === 9:
         gameOver();
-        console.log('Draw');
         break;
 
       case isSubset(playerOneCells, winSequence.horizontal.top) ||
