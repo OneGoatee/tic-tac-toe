@@ -28,7 +28,6 @@ const gameController = (() => {
 
   const getNextPlayer = () => {
     isPlayerOne = !isPlayerOne;
-
     isPlayerOne ? (player = 'One') : (player = 'Two');
   };
 
@@ -36,9 +35,7 @@ const gameController = (() => {
     isPlayerOne ? playerOneCells.push(Number(e.target.dataset.cell)) : playerTwoCells.push(Number(e.target.dataset.cell));
   };
 
-  const addPlayerMark = e => {
-    isPlayerOne ? (e.target.innerHTML = 'X') : (e.target.innerHTML = 'O');
-  };
+  const addPlayerMark = e => (isPlayerOne ? (e.target.innerHTML = 'X') : (e.target.innerHTML = 'O'));
 
   const disablePlayerClick = e => {
     if (isGameOver) {
@@ -50,13 +47,11 @@ const gameController = (() => {
     }
   };
 
-  const gameOver = () => {
-    isGameOver = true;
-  };
+  const gameOver = () => (isGameOver = true);
 
-  const isSubset = (arr1, arr2) => {
-    return arr2.every(element => arr1.includes(element));
-  };
+  const isSubset = (arr1, arr2) => arr2.every(element => arr1.includes(element));
+
+  const displayController = () => {};
 
   const checkWinner = () => {
     switch (true) {
@@ -88,15 +83,10 @@ const gameController = (() => {
         console.log('Player Two Wins');
         gameOver();
         break;
-
-      default:
-        break;
     }
   };
 
-  const updateMoves = () => {
-    moves = playerOneCells.length + playerTwoCells.length;
-  };
+  const updateMoves = () => (moves = playerOneCells.length + playerTwoCells.length);
 
   const handlePlayerClick = e => {
     switch (e.target.innerHTML === '' && !isGameOver) {
@@ -113,14 +103,11 @@ const gameController = (() => {
         updateMoves();
         checkWinner();
         break;
-
-      default:
-        break;
     }
 
     disablePlayerClick(e);
-    moves++;
     getNextPlayer();
+    moves++;
   };
 
   gridCells.forEach(cell => {
