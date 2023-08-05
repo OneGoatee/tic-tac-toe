@@ -46,13 +46,13 @@ const gameController = (() => {
 
   const removePlayerMark = () => gridCells.forEach(cell => (cell.innerHTML = ''));
 
-  function enablePlayerClick() {
+  const enablePlayerClick = () => {
     gridCells.forEach(cell => {
       if (isGameOver) return;
 
       cell.addEventListener('click', handlePlayerClick);
     });
-  }
+  };
 
   const disablePlayerClick = e => {
     if (isGameOver) {
@@ -66,8 +66,7 @@ const gameController = (() => {
 
   const gameOver = () => {
     isGameOver = true;
-    restartBtn.style.visibility = 'visible';
-    restartBtn.addEventListener('click', restartGame);
+    // restartBtn.style.visibility = 'visible';
   };
 
   const restartGame = () => {
@@ -82,6 +81,13 @@ const gameController = (() => {
     removePlayerMark();
     displayController();
     enablePlayerClick();
+  };
+
+  const enableRestart = () => {
+    if (moves > 0) {
+      restartBtn.style.visibility = 'visible';
+      restartBtn.addEventListener('click', restartGame);
+    }
   };
 
   const isSubset = (arr1, arr2) => arr2.every(element => arr1.includes(element));
@@ -166,6 +172,8 @@ const gameController = (() => {
     getNextPlayer();
     displayController();
     moves++;
+
+    enableRestart();
   };
 
   enablePlayerClick();
