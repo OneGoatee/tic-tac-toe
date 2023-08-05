@@ -1,5 +1,10 @@
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
 const gameController = (() => {
   const gridCells = document.querySelectorAll('.grid-cell');
+  const message = document.querySelector('.message');
+  const restartBtn = document.querySelector('.restart-button');
 
   const playerOneCells = [];
   const playerTwoCells = [];
@@ -22,13 +27,15 @@ const gameController = (() => {
   };
 
   let moves = 0;
-  let player = 'One';
+  let player = 'X';
+  let messageText = '';
   let isPlayerOne = true;
   let isGameOver = false;
 
   const getNextPlayer = () => {
+    if (isGameOver) return;
     isPlayerOne = !isPlayerOne;
-    isPlayerOne ? (player = 'One') : (player = 'Two');
+    isPlayerOne ? (player = 'X') : (player = 'O');
   };
 
   const getPlayerCell = e => {
@@ -36,6 +43,16 @@ const gameController = (() => {
   };
 
   const addPlayerMark = e => (isPlayerOne ? (e.target.innerHTML = 'X') : (e.target.innerHTML = 'O'));
+
+  const removePlayerMark = () => gridCells.forEach(cell => (cell.innerHTML = ''));
+
+  function enablePlayerClick() {
+    gridCells.forEach(cell => {
+      if (isGameOver) return;
+
+      cell.addEventListener('click', handlePlayerClick);
+    });
+  }
 
   const disablePlayerClick = e => {
     if (isGameOver) {
@@ -47,11 +64,49 @@ const gameController = (() => {
     }
   };
 
-  const gameOver = () => (isGameOver = true);
+  const gameOver = () => {
+    isGameOver = true;
+    restartBtn.style.visibility = 'visible';
+    restartBtn.addEventListener('click', restartGame);
+  };
+
+  const restartGame = () => {
+    restartBtn.style.visibility = 'hidden';
+    playerOneCells.length = 0;
+    playerTwoCells.length = 0;
+    player = 'X';
+    isPlayerOne = true;
+    isGameOver = false;
+    messageText = '';
+    updateMoves();
+    removePlayerMark();
+    displayController();
+    enablePlayerClick();
+  };
 
   const isSubset = (arr1, arr2) => arr2.every(element => arr1.includes(element));
 
-  const displayController = () => {};
+  const displayController = () => {
+    switch (true) {
+      case !isGameOver && moves === 0:
+        messageText = `Click a cell to start`;
+        message.innerHTML = messageText;
+        break;
+
+      case !isGameOver:
+        messageText = `${player} turn`;
+        message.innerHTML = messageText;
+        break;
+
+      case isGameOver:
+        messageText = `${player} Wins`;
+        message.innerHTML = messageText;
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const checkWinner = () => {
     switch (true) {
@@ -68,7 +123,6 @@ const gameController = (() => {
         isSubset(playerOneCells, winSequence.vertical.right) ||
         isSubset(playerOneCells, winSequence.diagonal.leftRight) ||
         isSubset(playerOneCells, winSequence.diagonal.rightLeft):
-        console.log('Player One Wins');
         gameOver();
         break;
 
@@ -80,7 +134,6 @@ const gameController = (() => {
         isSubset(playerTwoCells, winSequence.vertical.right) ||
         isSubset(playerTwoCells, winSequence.diagonal.leftRight) ||
         isSubset(playerTwoCells, winSequence.diagonal.rightLeft):
-        console.log('Player Two Wins');
         gameOver();
         break;
     }
@@ -107,12 +160,11 @@ const gameController = (() => {
 
     disablePlayerClick(e);
     getNextPlayer();
+    displayController();
     moves++;
   };
 
-  gridCells.forEach(cell => {
-    if (isGameOver) return;
+  enablePlayerClick();
 
-    cell.addEventListener('click', handlePlayerClick);
-  });
+  displayController();
 })();
